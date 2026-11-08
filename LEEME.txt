@@ -1,0 +1,83 @@
+MISS MINUTES · DISPLAY v2
+=========================
+
+Pantalla 16:9 para la TV. Tiene tres formas de usarse:
+
+  A) Receptor propio del Chromecast (la buena): la app del teléfono la manda a
+     la TV, la controla por voz y se queda en la tele aunque cierres la app.
+  B) Vista previa dentro de la app (pestaña Display): la misma pantalla en chiquito.
+  C) Doble clic en index.html en la compu: modo demo con teclas de prueba.
+
+Es la misma carpeta para las tres. Detecta sola dónde está corriendo.
+
+
+1) RECEPTOR DEL CHROMECAST (una sola vez)
+-----------------------------------------
+Los pasos completos están en docs/CHROMECAST.md del proyecto de la app. Resumen:
+  1. Sube ESTA carpeta (la que tiene index.html) a GitHub Pages. Queda una
+     dirección tipo https://TU_USUARIO.github.io/miss-minutes-display/
+  2. En la Google Cast SDK Developer Console paga el registro (5 USD), crea un
+     "Custom Receiver" y pega esa dirección.
+  3. Registra tu Chromecast con su número de serie (en la consola, no me lo mandes).
+  4. Copia el App ID de 8 caracteres y pégalo en la app: Sistema → Dispositivos.
+  5. Cierra y abre la app. En la pestaña Display aparece el botón de transmitir.
+Mientras no exista el App ID, la app usa el receptor genérico de Google y la
+pantalla no se puede mostrar en la TV (solo la vista previa).
+
+
+2) LO QUE PUEDE MOSTRAR
+-----------------------
+  dashboard    hora, cuenta regresiva, pendientes, Miss Minutes, línea del tiempo
+  hora         solo la hora gigante
+  cronologia   Sagrada Línea del Tiempo grande con anomalías
+  agenda       tabla de tareas por urgencia
+  cuenta       cuenta regresiva (o el temporizador del modo enfoque)
+  horario      horario semanal; la clase cancelada hoy sale tachada
+  buenosdias   hora, falta para la primera clase, pendientes de hoy y clima
+  emergencia   alerta Nexus de la tarea más grave
+  info         la última tarjeta, fija
+  bloques      vista nueva que arma Miss Minutes ("muéstrame en la tele…"):
+               texto, lista, número, cuenta, barra, gráfica y tabla
+
+Las ramas rojas de la línea del tiempo crecen según la urgencia de cada tarea.
+Al completar una tarea sale "LÍNEA TEMPORAL ESTABILIZADA".
+
+
+3) PROBARLO EN LA COMPU (modo demo)
+-----------------------------------
+- Descomprime y doble clic en index.html (de preferencia en Chrome). F = pantalla completa.
+- Teclas:
+    T  tarjeta temporal          H  solo la hora        D  dashboard
+    V  siguiente vista           N  alerta Nexus        C  estado de conexión
+    A  estado del asistente      F  pantalla completa   ?  ayuda
+
+
+4) TUS IMÁGENES (opcional)
+--------------------------
+  img/logo.png      → logo de la barra superior (horizontal, fondo transparente)
+  img/mascota.png   → imagen junto al globo (cuadrada, ~300×300)
+Si no existen, se usan el logo de texto y el reloj animado.
+Ojo: si subes la carpeta a GitHub Pages, esas imágenes quedan públicas.
+
+
+5) TEXTOS Y OPCIONES
+--------------------
+js/config.js: textos de marca, formato 12h/24h, duración de tarjetas,
+protegerPantalla (mueve la imagen 1–2 px cada 3 min para cuidar la TV).
+En la TV y en la app el modo demo se apaga solo.
+
+
+6) MENSAJES QUE ENTIENDE (para quien quiera tocar el código)
+-----------------------------------------------------------
+Todo llega por MissMinutesDisplay.recibir(msg), por el canal de Cast
+urn:x-cast:com.missminutes.display:
+  {tipo:"datos", datos:{…}}        {tipo:"modo", modo:"agenda"}
+  {tipo:"tarjeta", tarjeta:{…}}    {tipo:"bloques", vista:{titulo, bloques:[…]}}
+  {tipo:"nexus", activo, texto}    {tipo:"asistente", estado}
+  {tipo:"estabilizar", tarea}
+
+
+NOTAS
+-----
+- Las fuentes vienen de Google Fonts; sin internet usa una monoespaciada parecida.
+- No incluye el personaje, el logo de la TVA ni fotos: eso lo pones tú en img/.

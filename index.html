@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Miss Minutes · Display</title>
+<!-- Prototipo del display para la TV (16:9). Se abre con doble clic; no necesita servidor ni Python.
+     Las fuentes vienen de Google Fonts; sin internet usa una monoespaciada del sistema. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/display.css">
+</head>
+<body>
+<div id="escenario">
+  <div id="pantalla" class="arrancando">
+
+    <!-- ===== Arranque ===== -->
+    <div id="arranque">
+      <div class="arranque-caja">
+        <div class="arranque-marca" data-marca="titulo">M.M. // DISPLAY</div>
+        <div class="arranque-texto" id="arranque-texto">INICIANDO SISTEMA…</div>
+        <div class="barra"><div class="barra-relleno" id="arranque-barra"></div></div>
+        <div class="arranque-pie">TEMPORAL MONITOR · BOOT SEQUENCE</div>
+      </div>
+    </div>
+
+    <!-- ===== Marco ===== -->
+    <div class="marco">
+      <!-- columna de íconos (como en las referencias) -->
+      <div class="columna-iconos" aria-hidden="true">
+        <svg viewBox="0 0 10 10"><path d="M1 1h3v1H2v2H1zM6 1h3v3H8V2H6zM1 6h1v2h2v1H1zM8 6h1v3H6V8h2z"/></svg>
+        <svg viewBox="0 0 10 10"><path d="M1 1h6v2h2v6H3V7H1zm2 2v2h2v2h2V5H5V3z"/></svg>
+        <svg viewBox="0 0 10 10"><path d="M1 1h8v8H1zm6 1L2 7v1h1l5-5V2z"/></svg>
+        <svg viewBox="0 0 10 10"><path d="M1 1h3v2h2V1h3v3H7v2h2v3H6V7H4v2H1V6h2V4H1z"/></svg>
+        <svg viewBox="0 0 10 10"><path d="M1 1h8v2H3v6H1zm3 3h5v2H6v3H4z"/></svg>
+      </div>
+
+      <!-- barra superior -->
+      <header class="barra-superior">
+        <div class="logo" id="logo">
+          <img id="logo-img" alt="">
+          <span class="logo-texto" data-marca="titulo">M.M. // DISPLAY</span>
+        </div>
+        <div class="titulo-rayas"><span class="rayas"></span><span data-marca="subtitulo">SACRED TIMELINE MONITOR</span><span class="rayas"></span></div>
+        <div class="estado-iconos">
+          <span class="mini" id="clima-mini"></span>
+          <span class="mini" id="hora-mini"></span>
+          <div class="enlace" id="enlace"><span class="punto"></span><span id="enlace-texto">ENLACE: DEMO</span></div>
+          <svg class="ico" viewBox="0 0 12 12" aria-hidden="true"><path d="M5 0h1l3 3-2.2 2.2L9 7.5 6 10.5H5V6.4L2.9 8.5 2.1 7.7 4.8 5 2.1 2.3l.8-.8L5 3.6zm1 1.4v2.6l1.3-1.3zm0 4.6v2.6L7.3 7.3z"/></svg>
+          <div class="bateria" aria-hidden="true"><div class="bateria-nivel" id="bateria-nivel"></div></div>
+        </div>
+      </header>
+
+      <!-- ===== Dashboard ===== -->
+      <main class="dashboard" id="dashboard">
+        <!-- Reloj -->
+        <section class="panel panel-reloj">
+          <div class="panel-etiqueta">LOCAL TIME // HORA</div>
+          <div class="reloj-fila">
+            <div class="digitos grande" id="reloj"></div>
+            <div class="reloj-lado">
+              <div class="seg-ampm">
+                <div class="digitos segundos" id="reloj-seg"></div>
+                <div class="ampm"><span id="am">AM</span><span id="pm">PM</span></div>
+              </div>
+              <div class="digitos fecha" id="fecha"></div>
+              <div class="dia" id="dia">—</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Cuenta regresiva -->
+        <section class="panel panel-cuenta" id="panel-cuenta">
+          <div class="panel-etiqueta">COUNTDOWN // CUENTA REGRESIVA</div>
+          <div class="cuenta-cabeza"><div class="cuenta-nombre" id="cuenta-nombre">—</div><div class="cuenta-meta" id="cuenta-meta">—</div></div>
+          <div class="cuenta-bloque">
+            <div class="digitos cuenta" id="cuenta"></div>
+            <div class="cuenta-unidades"><span>DÍAS</span><span>HRS</span><span>MIN</span><span>SEG</span></div>
+          </div>
+          <div class="barra cuenta-barra"><div class="barra-relleno" id="cuenta-barra"></div></div>
+        </section>
+
+        <!-- Pendientes -->
+        <section class="panel panel-pendientes">
+          <div class="panel-etiqueta">PENDIENTES // TASKS <span class="contador" id="contador-pendientes"></span></div>
+          <div class="tabla-cabecera">
+            <span>#</span><span>TAREA</span><span>DEADLINE</span><span>TIME LEFT</span><span>STATUS</span>
+          </div>
+          <div class="tabla" id="tabla-pendientes"></div>
+        </section>
+
+        <!-- Mascota y mensaje -->
+        <section class="panel panel-mascota">
+          <div class="panel-etiqueta">ASSISTANT // ESTADO</div>
+          <div class="mascota-caja">
+            <img id="mascota-img" alt="">
+            <svg id="mascota-respaldo" viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="50" r="44" class="aro"/>
+              <circle cx="50" cy="50" r="36" class="aro2"/>
+              <g class="marcas"></g>
+              <line id="manecilla-h" x1="50" y1="50" x2="50" y2="28" class="manecilla"/>
+              <line id="manecilla-m" x1="50" y1="50" x2="50" y2="18" class="manecilla delgada"/>
+              <circle cx="50" cy="50" r="3.5" class="centro"/>
+            </svg>
+          </div>
+          <div class="globo" id="globo">…</div>
+          <div class="asistente-estado" id="asistente-estado">IDLE</div>
+        </section>
+
+        <!-- Línea del tiempo -->
+        <section class="panel panel-linea">
+          <div class="linea-cabecera">
+            <span>SACRED TIMELINE</span>
+            <span id="linea-mag">TIMELINE MAG: —</span>
+            <span id="linea-seg">SEGMENT: —</span>
+            <span class="linea-estado" id="linea-estado">STATUS: STABLE</span>
+          </div>
+          <svg id="linea" class="linea-tva" viewBox="0 0 1600 150" preserveAspectRatio="none"></svg>
+        </section>
+      </main>
+
+      <!-- ===== Modo "solo la hora" ===== -->
+      <div class="solo-hora" id="solo-hora">
+        <div class="digitos gigante" id="reloj-gigante"></div>
+        <div class="solo-hora-fila">
+          <div class="ampm grande-ampm"><span id="am2">AM</span><span id="pm2">PM</span></div>
+          <div class="digitos fecha" id="fecha2"></div>
+        </div>
+      </div>
+
+      <!-- ===== Vistas que arma Miss Minutes (agenda, horario, buenos días, bloques…) ===== -->
+      <div class="vista" id="vista"></div>
+
+      <!-- pie -->
+      <footer class="pie">
+        <span id="pie-fecha">—</span>
+        <span data-marca="pie">MISS MINUTES DISPLAY · PROTOTIPO · DATOS DEMO</span>
+        <span id="pie-coord">00.000 // 000000</span>
+      </footer>
+    </div>
+
+    <!-- ===== Tarjeta temporal ===== -->
+    <div class="capa-tarjeta" id="capa-tarjeta">
+      <div class="tarjeta" id="tarjeta">
+        <div class="tarjeta-cabecera"><span class="rayas"></span><span>INCOMING TRANSMISSION</span><span class="rayas"></span></div>
+        <div class="tarjeta-cuerpo">
+          <div class="tarjeta-lado">
+            <div class="etiqueta-rellena" id="tarjeta-tipo">REPORTE</div>
+            <div class="tarjeta-meta" id="tarjeta-meta"></div>
+          </div>
+          <div class="tarjeta-principal">
+            <div class="tarjeta-titulo" id="tarjeta-titulo"></div>
+            <ul class="tarjeta-lista" id="tarjeta-lista"></ul>
+            <div class="tarjeta-fuente" id="tarjeta-fuente"></div>
+          </div>
+        </div>
+        <div class="barra tarjeta-barra"><div class="barra-relleno" id="tarjeta-barra"></div></div>
+      </div>
+    </div>
+
+    <!-- ===== Alerta Nexus ===== -->
+    <div class="capa-nexus" id="capa-nexus">
+      <div class="nexus-caja">
+        <div class="nexus-titulo">WARNING!</div>
+        <div class="nexus-sub">NEXUS EVENT DETECTED</div>
+        <div class="nexus-texto" id="nexus-texto"></div>
+      </div>
+    </div>
+
+    <!-- aviso breve: línea estabilizada -->
+    <div class="aviso-estable" id="aviso-estable">LÍNEA TEMPORAL ESTABILIZADA</div>
+
+    <!-- ayuda de teclas (solo para probar) -->
+    <div class="ayuda" id="ayuda">
+      <b>TECLAS DE PRUEBA</b>
+      <span>T · tarjeta temporal</span><span>H · solo la hora</span><span>D · dashboard</span>
+      <span>N · alerta Nexus</span><span>C · estado de conexión</span><span>A · estado del asistente</span>
+      <span>V · siguiente vista</span><span>F · pantalla completa</span><span>? · ocultar esta ayuda</span>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/datos_demo.js"></script>
+<script src="js/segmentos.js"></script>
+<script src="js/display.js"></script>
+</body>
+</html>
